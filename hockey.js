@@ -1,5 +1,13 @@
 (function($, _, players, teams) {
 
+    var root = this;
+
+    var hockey = root.hockey = {};
+
+    hockey.forwards = players.forwards;
+    hockey.defensemen = players.defensemen;
+    hockey.teams = teams.teams;
+
     // Extract data from table rows of http://stats.hockeyanalysis.com/
     function extract () {
         return _.filter( _.map($('tr'), function(el, i) {
@@ -24,8 +32,8 @@
         }));
     }
 
-    var showPlayers = _.partial( show, players.labels ),
-        showTeams   = _.partial( show, teams.labels );
+    var showPlayers = hockey.showPlayers = _.partial( show, players.labels ),
+        showTeams   = hockey.showTeams = _.partial( show, teams.labels );
 
     // sortBy :: [b] -> b -> ([a] -> [a])
     function sortBy ( labels, label) {
@@ -40,27 +48,37 @@
     var sortPlayers = _.partial( sortBy, players.labels ),
         sortTeams   = _.partial( sortBy, teams.labels );
 
-    var sortForwardsBy = {
+    var sortForwardsBy = hockey.sortForwardsBy = {
           points : _.partial(sortPlayers('Points'), players.forwards),
           fenwick : _.partial(sortPlayers('iFenwick'), players.forwards),
           points60 : _.partial(sortPlayers('Points/60'), players.forwards)
         },
-        sortDefenseBy = {
+        sortDefenseBy = hockey.sortDefenseBy = {
           points : _.partial(sortPlayers('Points'), players.defensemen),
           fenwick : _.partial(sortPlayers('iFenwick'), players.defensemen),
           points60 : _.partial(sortPlayers('Points/60'), players.defensemen)
         },
-        sortTeamsBy = {
+        sortTeamsBy = hockey.sortTeamsBy = {
             goals : _.partial(sortTeams('GF'), teams.teams),
             fenwick : _.partial(sortTeams('FF'), teams.teams)
         };
 
-    var sortPlayersByTeam = function( players, teams ) {
+    var sortPlayersByTeam = hockey.sortPlayersByTeam = function( players, teams ) {
         var teamNames = _.map(teams, function(team) { return team[1]; });
         return _.sortBy(players, function(scorer) {
             return _.indexOf( teamNames, scorer[2]);
         });
     };
+
+    hockey.removePlayer = function( playerName, players ) {
+        var indexOf = _.indexOf(_.map(players, function(player) { return player[1].toLowerCase(); }), playerName);
+        return indexOf > -1 ? players.splice( indexOf, 1)[0] : undefined;
+    };
+
+    hockey.findPlayer = function( playerName, players ) {
+        return _.find( players, function(player) { return player[1].toLowerCase().indexOf(playerName) !== -1; });
+    };
+
     
 
 
