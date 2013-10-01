@@ -1,0 +1,21 @@
+{
+  "name": "hockey",
+  "version": "0.0.0",
+  "description": "hockey ======",
+  "main": "hockey.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ricardmo/hockey.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/ricardmo/hockey/issues"
+  },
+  "dependencies": {
+    "underscore": "~1.5.2"
+  }
+}
