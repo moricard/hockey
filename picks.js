@@ -1,53 +1,54 @@
 var _ = require('underscore');
 
+
 var defensemen = [
-    ['subban, p.k.' , 67, 'mtl'],
-    ['duncan, keith', 51, 'chi'],
-    ['Letang, kristopher', 68, 'pit'],
-    ['karlsson, erik', 70, 'ott'],
-    ['Kronwall, Niklas', 51, 'det'],
-    ['Schultz, Justin', 48, 'edm'],
+    ['p.k. subban' , 67, 'mtl'],
+    ['duncan keith', 51, 'chi'],
+    ['kristopher Letang', 68, 'pit'],
+    ['erik karlsson', 70, 'ott'],
+    ['Niklas Kronwall', 51, 'det'],
+    ['Justin Schultz', 48, 'edm'],
 
-    ['yandle, keith', 50, 'phx'],
-    ['byfuglien, dustin', 52, 'win'],
-    ['streit, mark', 50, 'phi']
-    ['Weber, shea', 48, 'nsh'],
-    ['Suter, Ryan', 52, 'min'],
-    ['green, mike', 55, 'wsh'],
+    ['keith yandle', 50, 'phx'],
+    ['dustin byfuglien', 52, 'win'],
+    ['mark streit', 50, 'phi']
+    ['shea Weber', 48, 'nsh'],
+    ['Ryan Suter', 52, 'min'],
+    ['mike green', 55, 'wsh'],
 
-    ['Pietrangelo, Alex', 49, 'stl'],
-    ['Timonen, Kimmo', 48, 'phi']
-    ['Phaneuf, Dion', 45, 'tor'],
-    ['campbell, brian', 42, 'flo'],
-    ['Markov, Andrei', 40, 'mtl'],
-    ['Voynov, Vyacheslav', 46, 'tpb']
+    ['Alex Pietrangelo', 49, 'stl'],
+    ['Kimmo Timonen', 48, 'phi']
+    ['Dion Phaneuf', 45, 'tor'],
+    ['brian campbell', 42, 'flo'],
+    ['Andrei Markov', 40, 'mtl'],
+    ['Vyacheslav Voynov', 46, 'tpb']
 ];
 
 var montreal = [
-    ['subban, p.k.', 67, 'mtl'],
-    ['price, carey', 79, 'mtl'],
-    ['pacioretty, max', 71, 'mtl'],
-    ['Plekanec, Tomas', 59, 'mtl'],
+   // ['subban, p.k.', 67, 'mtl'],
+   // ['price, carey', 79, 'mtl'],
+   // ['pacioretty, max', 71, 'mtl'],
+   // ['Plekanec, Tomas', 59, 'mtl'],
 
-    ['Galchenyuk, alex', 55, 'mtl'],
-    ['Gallagher, Brendan', 54, 'mtl'],
-    ['Eller, Lars', 55, 'mtl'],
-    ['Ryder, michael', 52, 'mtl'],
+    ['alex Galchenyuk', 55, 'mtl'],
+    ['Brendan Gallagher', 54, 'mtl'],
+    ['Lars Eller', 55, 'mtl'],
+    ['michael Ryder', 52, 'mtl'],
 
-    ['Desharnais, David', 49, 'mtl'],
-    ['Gionta, Brian', 41, 'mtl'],
-    ['markov, andrei', 40, 'mtl'],
-    ['Bourque, rene', 30, 'mtl']
+    ['David Desharnais', 49, 'mtl'],
+    ['Brian Gionta', 41, 'mtl'],
+//    ['markov andrei', 40, 'mtl'],
+    ['rene Bourque', 30, 'mtl']
 ];
 
 var goalies = [
-    ['price, carey', 79, 'mtl'],
-    ['lundqvist, henrik', 88, 'ny'],
-    ['howard, jimmy', 86, 'det'],
-    ['Crawford, corey', 85, 'chi'],
-    ['Rask, Tuukka', 85, 'bos'],
-    ['Backstrom, niklas', 84, 'min'],
-    ['Fleury, Marc-Andre', 79, 'pit']
+    ['carey price', 79, 'mtl'],
+    ['henrik lundqvist', 88, 'ny'],
+    ['jimmy howard', 86, 'det'],
+    ['corey Crawford', 85, 'chi'],
+    ['Tuukka Rask', 85, 'bos'],
+    ['niklas Backstrom', 84, 'min'],
+    ['Marc-Andre Fleury', 79, 'pit']
 ];
 
 var forwards = [
@@ -62,7 +63,7 @@ var forwards = [
     ["John Tavares", 87, "nyi"],
     ["Martin St-Louis", 85, "tb"],
     ["Patrick Kane", 85, "chi"],
-    ["Corey Perry", 84, "ana"],     
+    ["Corey Perry", 84, "ana"],
     ["Claude Giroux", 84, "phi"],
     ["Nicklas Backstrom", 84, "was"], // 2nd round (all forwards) (+4)
     ["Taylor Hall", 84, "edm"],
@@ -73,7 +74,7 @@ var forwards = [
     ["Jonathan Toews", 81, "chi"],
     ["Rick Nash", 80, "nyr"],         // 3rd round (all forwards) (+6)
     ["Henrik Zetterberg", 79, "det"],
-    ["Anze Kopitar", 77, "la"],     
+    ["Anze Kopitar", 77, "la"],
     ["Daniel Sedin", 77, "van"],
     ["Jason Spezza", 76, "ott"],
     ["Thomas Vanek", 75, "buf"],
@@ -136,26 +137,69 @@ var forwards = [
     ["Joe Pavelski", 57, "sj"],
     ["Ryan Callahan", 57, "nyr"],    //13th
     ["Marcus Johansson", 57, "was"],
-    ["Ryan Nugent-Hopkins", 57, "edm"]
+    ["Ryan Nugent-Hopkins", 57, "edm"],
+  ["Jeff Skinner", 51, "car"]
 ];
 
+var allPlayers = forwards.concat( goalies ).concat( montreal ).concat( defensemen );
 
+var mixins = {};
+
+mixins.player = function( name ) {
+  return _.find( allPlayers, function( player ) { return player && (player[0].toLowerCase().indexOf( name.toLowerCase() ) !== -1); });
+};
+
+mixins.best12 = function( players ) {
+  return _.reduce( _.sortBy(players, function(player) { return -player[1]; }).splice(0,12),
+                   function(memo, player) { return memo + player[1]; }, 0);
+};
+_.mixin( mixins );
+
+var carlos = [
+  _.player('Crosby'),
+  _.player('Kessel'),
+  _.player('Nicklas Backstrom'),
+  _.player('Carey Price'),
+  _.player('Markov'),
+  _.player('Kopitar'),
+  _.player('Mike Green'),
+  _.player('Zach Parise'),
+  _.player('Pietrangelo'),
+  _.player('Jamie Benn'),
+  _.player('Jeff Skinner'),
+  _.player('Patrick Sharp'),
+  _.player('Blake Wheeler'),
+  _.player('Pominville')
+];
+
+var marco = [
+  _.player('subban'),
+  _.player('getzlaf'),
+  _.player('duncan keith'),
+  _.player('corey perry'),
+  _.player('plekanec'),
+  _.player('datsyuk'),
+  _.player('zetterberg'),
+  _.player('vanek'),
+  _.player('semin'),
+  _.player('voracek'),
+  _.player('kunitz'),
+  _.player('kadri'),
+  _.player('howard'),
+  _.player('schultz')
+];
 
 var probabilities = {
 
 };
 
-
-
-
-
-
-
-
-
 module.exports = {
-    montreal: montreal,
-    defensemen: defensemen,
-    forwards: forwards,
-    goalies: goalies
+  montreal: montreal,
+  defensemen: defensemen,
+  forwards: forwards,
+  goalies: goalies,
+  contestants: {
+    carlos: carlos,
+    marco: marco
+  }
 };
