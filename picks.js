@@ -21,7 +21,8 @@ var defensemen = [
     ['Dion Phaneuf', 45, 'tor'],
     ['brian campbell', 42, 'flo'],
     ['Andrei Markov', 40, 'mtl'],
-    ['Vyacheslav Voynov', 46, 'tpb']
+    ['Vyacheslav Voynov', 46, 'tpb'],
+    ['Drew Doughty', 40, 'la']
 ];
 
 var montreal = [
@@ -33,8 +34,8 @@ var montreal = [
     ['alex Galchenyuk', 55, 'mtl'],
     ['Brendan Gallagher', 54, 'mtl'],
     ['Lars Eller', 55, 'mtl'],
-    ['michael Ryder', 52, 'mtl'],
 
+    ['daniel briere', 49, 'mtl'],
     ['David Desharnais', 49, 'mtl'],
     ['Brian Gionta', 41, 'mtl'],
 //    ['markov andrei', 40, 'mtl'],
@@ -48,7 +49,8 @@ var goalies = [
     ['corey Crawford', 85, 'chi'],
     ['Tuukka Rask', 85, 'bos'],
     ['niklas Backstrom', 84, 'min'],
-    ['Marc-Andre Fleury', 79, 'pit']
+    ['Marc-Andre Fleury', 79, 'pit'],
+    ['Roberto Luongo', 77, 'van']
 ];
 
 var forwards = [
@@ -138,7 +140,10 @@ var forwards = [
     ["Ryan Callahan", 57, "nyr"],    //13th
     ["Marcus Johansson", 57, "was"],
     ["Ryan Nugent-Hopkins", 57, "edm"],
-  ["Jeff Skinner", 51, "car"]
+    ["Paul Stastny", 55, "col"],
+    ["Jeff Skinner", 51, "car"],
+    ["Brian Campbell", 42, "fla"],
+    ["Marian Gaborik", 56, "cbj"]
 ];
 
 var allPlayers = forwards.concat( goalies ).concat( montreal ).concat( defensemen );
@@ -189,6 +194,73 @@ var marco = [
   _.player('schultz')
 ];
 
+var jf = [
+    _.player('St-Louis'),
+    _.player('Letang'),
+    _.player('Henrik Sedin'),
+    _.player('Daniel Sedin'),
+    _.player('Luongo'),
+    _.player('Rick Nash'),
+    _.player('byfuglien'),
+    _.player('Lars Eller'),
+    _.player('Joe Thornton'),
+    _.player('Brad Richards'),
+    _.player('mark streit'),
+    _.player('Paul Stastny'),
+    _.player('Iginla'),
+    _.player('rene Bourque')
+];
+
+var jp = [
+    _.player('Ovechkin'),
+    _.player('karlsson'),
+    _.player('taylor hall'),
+    _.player('Jonathan Toews'),
+    _.player('Daniel Briere'),
+    _.player('eric staal'),
+    _.player('Desharnais'),
+    _.player('Brian Campbell'),
+    _.player('Crawford'),
+    _.player('moulson'),
+    _.player('Ribeiro'),
+    _.player('Huberdeau'),
+    _.player('CHARA'),
+    _.player('Hossa')
+];
+
+var jose = [
+    _.player('Stamkos'),
+    _.player('kane'),
+    _.player('rask'),
+    _.player('james neal'),
+    _.player('Galchenyuk'),
+    _.player('Eberle'),
+    _.player('Gallagher'),
+    _.player('Krejci'),
+    _.player('Duchene'),
+    _.player('Couture'),
+    _.player('EDLER'),
+    _.player('suter'),
+    _.player('Kronwall'),
+    _.player('yakupov')
+];
+
+var fred = [
+    _.player('Malkin'),
+    _.player('Tavares'),
+    _.player('Giroux'),
+    _.player('Pacioretty'),
+    _.player('Weber'),
+    _.player('Spezza'),
+    _.player('yandle'),
+    _.player('Gionta'),
+    _.player('lundqvist'),
+    _.player('tyler Seguin'),
+    _.player('bobby Ryan'),
+    _.player('Loui Eriksson'),
+    _.player('Drew Doughty'),
+    _.player('GABORIK')
+];
 var probabilities = {
 
 };
@@ -200,6 +272,10 @@ module.exports = {
   goalies: goalies,
   contestants: {
     carlos: carlos,
-    marco: marco
+    marco: marco,
+      jp: jp,
+      jf: jf,
+      fred: fred,
+      jose: jose
   }
 };
