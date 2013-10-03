@@ -11,18 +11,20 @@ var defensemen = [
 
     ['keith yandle', 50, 'phx'],
     ['dustin byfuglien', 52, 'win'],
-    ['mark streit', 50, 'phi']
+    ['mark streit', 50, 'phi'],
     ['shea Weber', 48, 'nsh'],
     ['Ryan Suter', 52, 'min'],
     ['mike green', 55, 'wsh'],
 
     ['Alex Pietrangelo', 49, 'stl'],
-    ['Kimmo Timonen', 48, 'phi']
+    ['Kimmo Timonen', 48, 'phi'],
     ['Dion Phaneuf', 45, 'tor'],
     ['brian campbell', 42, 'flo'],
+    ['alexander edler', 43, 'van'],
     ['Andrei Markov', 40, 'mtl'],
     ['Vyacheslav Voynov', 46, 'tpb'],
-    ['Drew Doughty', 40, 'la']
+    ['Drew Doughty', 40, 'la'],
+    ['zdeno chara', 35, 'bos']
 ];
 
 var montreal = [
@@ -151,13 +153,26 @@ var allPlayers = forwards.concat( goalies ).concat( montreal ).concat( defenseme
 var mixins = {};
 
 mixins.player = function( name ) {
-  return _.find( allPlayers, function( player ) { return player && (player[0].toLowerCase().indexOf( name.toLowerCase() ) !== -1); });
+  var player = _.find( allPlayers, function( player ) { return player && (player[0].toLowerCase().indexOf( name.toLowerCase() ) !== -1); });
+    if ( !player ) console.debug('no player found for name: ' + name );
+    return player;
 };
 
 mixins.best12 = function( players ) {
   return _.reduce( _.sortBy(players, function(player) { return -player[1]; }).splice(0,12),
                    function(memo, player) { return memo + player[1]; }, 0);
 };
+
+mixins.descending = function( integer ) {
+    return -integer;
+};
+
+mixins.points = function( player ) {
+    return player[1];
+};
+
+mixins.add = function( a, b ) { return a + b; };
+
 _.mixin( mixins );
 
 var carlos = [
@@ -205,7 +220,7 @@ var jf = [
     _.player('Lars Eller'),
     _.player('Joe Thornton'),
     _.player('Brad Richards'),
-    _.player('mark streit'),
+    _.player('streit'),
     _.player('Paul Stastny'),
     _.player('Iginla'),
     _.player('rene Bourque')
@@ -224,7 +239,7 @@ var jp = [
     _.player('moulson'),
     _.player('Ribeiro'),
     _.player('Huberdeau'),
-    _.player('CHARA'),
+    _.player('chara'),
     _.player('Hossa')
 ];
 
@@ -239,7 +254,7 @@ var jose = [
     _.player('Krejci'),
     _.player('Duchene'),
     _.player('Couture'),
-    _.player('EDLER'),
+    _.player('edler'),
     _.player('suter'),
     _.player('Kronwall'),
     _.player('yakupov')
@@ -250,7 +265,7 @@ var fred = [
     _.player('Tavares'),
     _.player('Giroux'),
     _.player('Pacioretty'),
-    _.player('Weber'),
+    _.player('shea Weber'),
     _.player('Spezza'),
     _.player('yandle'),
     _.player('Gionta'),
@@ -261,21 +276,49 @@ var fred = [
     _.player('Drew Doughty'),
     _.player('GABORIK')
 ];
-var probabilities = {
 
+// [ String, Int, String ] -> Float
+var remove7th = function( player ) {
+    var score = _.points(player);
+    return score - score / 7.0;
 };
 
-module.exports = {
-  montreal: montreal,
-  defensemen: defensemen,
-  forwards: forwards,
-  goalies: goalies,
-  contestants: {
+var amortize = function( array ) { return _.map( array, remove7th ); };
+
+var projectedPoints = function( players ) {
+    return _.reduce( amortize(players), _.add, 0 );
+};
+
+var poolers = {
     carlos: carlos,
     marco: marco,
-      jp: jp,
-      jf: jf,
-      fred: fred,
-      jose: jose
-  }
+    jp: jp,
+    jf: jf,
+    fred: fred,
+    jose: jose
+};
+
+var projections =  _.map(poolers, projectedPoints);
+
+var probabilities = _.sortBy( _.zip( _.keys(poolers), projections ), 
+                              _.compose( _.descending, _.points ) );
+
+var totalPoints = _.reduce( _.map(probabilities, _.points), _.add, 0 );
+
+var windows = _.map( probabilities, function( pair ) {
+    return [ pair[0], 
+             pair[1] - pair[1] * 2.5 / 100.0, 
+             pair[1] + pair[1] * 2.5 / 100.0 ];
+});
+
+var mean = totalPoints / _.size( probabilities );
+
+var distance = _.map( probabilities, function( pair ) { return [ pair[0], pair[1] - mean ]; });
+
+module.exports = {
+  projection: probabilities,
+    mean: mean,
+    distance: distance,
+    relativeDistance: _.map( distance, function( pair ) { return [ pair[0], pair[1] / mean * 100 ]; }),
+    windows: windows
 };
